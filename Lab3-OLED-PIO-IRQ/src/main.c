@@ -66,7 +66,7 @@ void pisca_led() {
     sprintf(str, "%.2f", freq_hertz());
     gfx_mono_draw_string(str, 35, 16, &sysfont);
     for (unsigned int i = 0; i < piscadas; i++) {
-        unsigned int progress = 128 * (i + 1) / piscadas;
+        unsigned int progress = 124 * (i + 1) / piscadas;
         gfx_mono_draw_filled_rect(2, 2, progress, 10, GFX_PIXEL_SET);
         if (ant_delay != delay_piscada) {
             sprintf(str, "%.2f", freq_hertz());
@@ -78,12 +78,12 @@ void pisca_led() {
         pio_set(LED_PIO, LED_IDX_MASK);
         delay_ms(delay_piscada);
         if (parar) {
-            gfx_mono_draw_filled_rect(2, 2, 128, 10, GFX_PIXEL_CLR);
+            gfx_mono_draw_filled_rect(2, 2, 124, 10, GFX_PIXEL_CLR);
 			piscando = 0;
             break;
         }
     }
-    gfx_mono_draw_filled_rect(2, 2, 128, 10, GFX_PIXEL_CLR);
+    gfx_mono_draw_filled_rect(2, 2, 124, 10, GFX_PIXEL_CLR);
 	piscando = 0;
 }
 
