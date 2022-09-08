@@ -100,8 +100,8 @@ void io_init(void) {
     pio_configure(BUT_PIO_OLED3, PIO_INPUT, BUT_PIO_OLED3_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);
 
     pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED1_IDX_MASK, 60);
-    pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED2_IDX_MASK, 60);
-    pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED3_IDX_MASK, 60);
+    pio_set_debounce_filter(BUT_PIO_OLED2, BUT_PIO_OLED2_IDX_MASK, 60);
+    pio_set_debounce_filter(BUT_PIO_OLED3, BUT_PIO_OLED3_IDX_MASK, 60);
 
     pio_handler_set(BUT_PIO_OLED1,
                     BUT_PIO_OLED1_ID,

@@ -3727,60 +3727,60 @@ void io_init(void) {
   401658:	f8df 8120 	ldr.w	r8, [pc, #288]	; 40177c <io_init+0x12c>
   40165c:	47c0      	blx	r8
     pio_configure(LED_PIO, PIO_OUTPUT_0, LED_IDX_MASK, PIO_DEFAULT);
-  40165e:	4d3b      	ldr	r5, [pc, #236]	; (40174c <io_init+0xfc>)
+  40165e:	4c3b      	ldr	r4, [pc, #236]	; (40174c <io_init+0xfc>)
   401660:	2300      	movs	r3, #0
   401662:	f44f 7280 	mov.w	r2, #256	; 0x100
   401666:	f04f 5140 	mov.w	r1, #805306368	; 0x30000000
-  40166a:	4628      	mov	r0, r5
+  40166a:	4620      	mov	r0, r4
   40166c:	4f38      	ldr	r7, [pc, #224]	; (401750 <io_init+0x100>)
   40166e:	47b8      	blx	r7
 
     pmc_enable_periph_clk(BUT_PIO_OLED1);
-  401670:	4c38      	ldr	r4, [pc, #224]	; (401754 <io_init+0x104>)
-  401672:	4620      	mov	r0, r4
+  401670:	4e38      	ldr	r6, [pc, #224]	; (401754 <io_init+0x104>)
+  401672:	4630      	mov	r0, r6
   401674:	47c0      	blx	r8
     pmc_enable_periph_clk(BUT_PIO_OLED2);
-  401676:	4628      	mov	r0, r5
+  401676:	4620      	mov	r0, r4
   401678:	47c0      	blx	r8
     pmc_enable_periph_clk(BUT_PIO_OLED3);
-  40167a:	4e37      	ldr	r6, [pc, #220]	; (401758 <io_init+0x108>)
-  40167c:	4630      	mov	r0, r6
+  40167a:	4d37      	ldr	r5, [pc, #220]	; (401758 <io_init+0x108>)
+  40167c:	4628      	mov	r0, r5
   40167e:	47c0      	blx	r8
 
     pio_configure(BUT_PIO_OLED1, PIO_INPUT, BUT_PIO_OLED1_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);
   401680:	2309      	movs	r3, #9
   401682:	f04f 5280 	mov.w	r2, #268435456	; 0x10000000
   401686:	f04f 5120 	mov.w	r1, #671088640	; 0x28000000
-  40168a:	4620      	mov	r0, r4
+  40168a:	4630      	mov	r0, r6
   40168c:	47b8      	blx	r7
     pio_configure(BUT_PIO_OLED2, PIO_INPUT, BUT_PIO_OLED2_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);
   40168e:	2309      	movs	r3, #9
   401690:	f04f 4200 	mov.w	r2, #2147483648	; 0x80000000
   401694:	f04f 5120 	mov.w	r1, #671088640	; 0x28000000
-  401698:	4628      	mov	r0, r5
+  401698:	4620      	mov	r0, r4
   40169a:	47b8      	blx	r7
     pio_configure(BUT_PIO_OLED3, PIO_INPUT, BUT_PIO_OLED3_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);
   40169c:	2309      	movs	r3, #9
   40169e:	f44f 2200 	mov.w	r2, #524288	; 0x80000
   4016a2:	f04f 5120 	mov.w	r1, #671088640	; 0x28000000
-  4016a6:	4630      	mov	r0, r6
+  4016a6:	4628      	mov	r0, r5
   4016a8:	47b8      	blx	r7
 
     pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED1_IDX_MASK, 60);
   4016aa:	223c      	movs	r2, #60	; 0x3c
   4016ac:	f04f 5180 	mov.w	r1, #268435456	; 0x10000000
-  4016b0:	4620      	mov	r0, r4
+  4016b0:	4630      	mov	r0, r6
   4016b2:	4f2a      	ldr	r7, [pc, #168]	; (40175c <io_init+0x10c>)
   4016b4:	47b8      	blx	r7
-    pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED2_IDX_MASK, 60);
+    pio_set_debounce_filter(BUT_PIO_OLED2, BUT_PIO_OLED2_IDX_MASK, 60);
   4016b6:	223c      	movs	r2, #60	; 0x3c
   4016b8:	f04f 4100 	mov.w	r1, #2147483648	; 0x80000000
   4016bc:	4620      	mov	r0, r4
   4016be:	47b8      	blx	r7
-    pio_set_debounce_filter(BUT_PIO_OLED1, BUT_PIO_OLED3_IDX_MASK, 60);
+    pio_set_debounce_filter(BUT_PIO_OLED3, BUT_PIO_OLED3_IDX_MASK, 60);
   4016c0:	223c      	movs	r2, #60	; 0x3c
   4016c2:	f44f 2100 	mov.w	r1, #524288	; 0x80000
-  4016c6:	4620      	mov	r0, r4
+  4016c6:	4628      	mov	r0, r5
   4016c8:	47b8      	blx	r7
 
     pio_handler_set(BUT_PIO_OLED1,
@@ -3789,7 +3789,7 @@ void io_init(void) {
   4016ce:	2340      	movs	r3, #64	; 0x40
   4016d0:	f04f 5280 	mov.w	r2, #268435456	; 0x10000000
   4016d4:	2110      	movs	r1, #16
-  4016d6:	4620      	mov	r0, r4
+  4016d6:	4630      	mov	r0, r6
   4016d8:	4f22      	ldr	r7, [pc, #136]	; (401764 <io_init+0x114>)
   4016da:	47b8      	blx	r7
                     BUT_PIO_OLED1_ID,
@@ -3803,7 +3803,7 @@ void io_init(void) {
   4016e0:	2350      	movs	r3, #80	; 0x50
   4016e2:	f04f 4200 	mov.w	r2, #2147483648	; 0x80000000
   4016e6:	210c      	movs	r1, #12
-  4016e8:	4628      	mov	r0, r5
+  4016e8:	4620      	mov	r0, r4
   4016ea:	47b8      	blx	r7
                     BUT_PIO_OLED2_ID,
                     BUT_PIO_OLED2_IDX_MASK,
@@ -3816,7 +3816,7 @@ void io_init(void) {
   4016f0:	2350      	movs	r3, #80	; 0x50
   4016f2:	f44f 2200 	mov.w	r2, #524288	; 0x80000
   4016f6:	210a      	movs	r1, #10
-  4016f8:	4630      	mov	r0, r6
+  4016f8:	4628      	mov	r0, r5
   4016fa:	47b8      	blx	r7
                     BUT_PIO_OLED3_ID,
                     BUT_PIO_OLED3_IDX_MASK,
@@ -3825,28 +3825,28 @@ void io_init(void) {
 
     pio_enable_interrupt(BUT_PIO_OLED1, BUT_PIO_OLED1_IDX_MASK);
   4016fc:	f04f 5180 	mov.w	r1, #268435456	; 0x10000000
-  401700:	4620      	mov	r0, r4
+  401700:	4630      	mov	r0, r6
   401702:	4f1b      	ldr	r7, [pc, #108]	; (401770 <io_init+0x120>)
   401704:	47b8      	blx	r7
     pio_enable_interrupt(BUT_PIO_OLED2, BUT_PIO_OLED2_IDX_MASK);
   401706:	f04f 4100 	mov.w	r1, #2147483648	; 0x80000000
-  40170a:	4628      	mov	r0, r5
+  40170a:	4620      	mov	r0, r4
   40170c:	47b8      	blx	r7
     pio_enable_interrupt(BUT_PIO_OLED3, BUT_PIO_OLED3_IDX_MASK);
   40170e:	f44f 2100 	mov.w	r1, #524288	; 0x80000
-  401712:	4630      	mov	r0, r6
+  401712:	4628      	mov	r0, r5
   401714:	47b8      	blx	r7
 
     pio_get_interrupt_status(BUT_PIO_OLED1);
-  401716:	4620      	mov	r0, r4
-  401718:	4c16      	ldr	r4, [pc, #88]	; (401774 <io_init+0x124>)
-  40171a:	47a0      	blx	r4
+  401716:	4630      	mov	r0, r6
+  401718:	4e16      	ldr	r6, [pc, #88]	; (401774 <io_init+0x124>)
+  40171a:	47b0      	blx	r6
     pio_get_interrupt_status(BUT_PIO_OLED2);
-  40171c:	4628      	mov	r0, r5
-  40171e:	47a0      	blx	r4
+  40171c:	4620      	mov	r0, r4
+  40171e:	47b0      	blx	r6
     pio_get_interrupt_status(BUT_PIO_OLED3);
-  401720:	4630      	mov	r0, r6
-  401722:	47a0      	blx	r4
+  401720:	4628      	mov	r0, r5
+  401722:	47b0      	blx	r6
   NVIC->ISER[(uint32_t)((int32_t)IRQn) >> 5] = (uint32_t)(1 << ((uint32_t)((int32_t)IRQn) & (uint32_t)0x1F)); /* enable interrupt */
   401724:	4b14      	ldr	r3, [pc, #80]	; (401778 <io_init+0x128>)
   401726:	f44f 3280 	mov.w	r2, #65536	; 0x10000
