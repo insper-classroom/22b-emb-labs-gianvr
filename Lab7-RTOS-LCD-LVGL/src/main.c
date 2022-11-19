@@ -12,6 +12,17 @@
 #define AFEC_ID ID_AFEC0
 #define AFEC_CHANNEL 5 // Canal do pino PB2
 
+#define BACKLIGHT_PIO PIOC
+#define BACKLIGHT_PIO_ID ID_PIOC
+#define BACKLIGHT_PIO_IDX 31
+#define BACKLIGHT_IDX_MASK (1 << BACKLIGHT_PIO_IDX)
+
+// Botão (placa)
+#define BUT_PIO_LIGA PIOA
+#define BUT_PIO_LIGA_ID ID_PIOA
+#define BUT_PIO_LIGA_IDX 11
+#define BUT_PIO_LIGA_IDX_MASK (1 << BUT_PIO_LIGA_IDX)
+
 /************************************************************************/
 /* LCD / LVGL                                                           */
 /************************************************************************/
@@ -47,7 +58,6 @@ lv_obj_t * labelDown;
 volatile char modifica = 0;
 
 SemaphoreHandle_t xSemaphoreClock;
-SemaphoreHandle_t xSemaphoreDesliga;
 
 static void configure_console(void) ;
 void lv_termostato(void);
@@ -152,9 +162,8 @@ static void handler_power(lv_event_t * e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if(code == LV_EVENT_CLICKED) {
-		  xSemaphoreGiveFromISR(xSemaphoreDesliga, 0);
+		  pio_clear(BACKLIGHT_PIO,BACKLIGHT_IDX_MASK);
 	}
-
 }
 
 static void handler_menu(lv_event_t * e) {
@@ -242,6 +251,10 @@ static void handler_down(lv_event_t * e) {
 				}
 		}
 	}
+}
+
+void but_liga_callback(void){
+	pio_set(BACKLIGHT_PIO, BACKLIGHT_IDX_MASK);
 }
 
 void lv_termostato(void) {
@@ -371,19 +384,10 @@ void vTimerCallback(TimerHandle_t xTimer) {
 
 static void task_lcd(void *pvParameters) {
 	configure_console();
-	 
 	lv_termostato();
-	char atualizar = 1;
 	for (;;)  {
-		if( xSemaphoreTake(xSemaphoreDesliga, 0) == pdTRUE ){
-			atualizar = 0;
-		}
-		if(atualizar){
 			lv_tick_inc(50);
 			lv_task_handler();
-		}else{
-			ili9341_backlight_off();
-		}
 		vTaskDelay(50);
 	}
 }
@@ -528,6 +532,24 @@ void RTC_init(Rtc *rtc, uint32_t id_rtc, calendar t, uint32_t irq_type) {
 	/* Ativa interrupcao via alarme */
 	rtc_enable_interrupt(rtc,  irq_type);
 }
+
+void io_init(void){
+	pmc_enable_periph_clk(BACKLIGHT_PIO_ID);
+	pio_set_output(BACKLIGHT_PIO, BACKLIGHT_IDX_MASK, 1, 0, 0);
+	
+	pmc_enable_periph_clk(BUT_PIO_LIGA);
+	pio_configure(BUT_PIO_LIGA, PIO_INPUT, BUT_PIO_LIGA_IDX_MASK, PIO_PULLUP | PIO_DEBOUNCE);
+	pio_set_debounce_filter(BUT_PIO_LIGA, BUT_PIO_LIGA_IDX_MASK, 60);
+	pio_handler_set(BUT_PIO_LIGA,
+					BUT_PIO_LIGA_ID,
+					BUT_PIO_LIGA_IDX_MASK,
+					PIO_IT_FALL_EDGE,
+					but_liga_callback);
+	pio_enable_interrupt(BUT_PIO_LIGA, BUT_PIO_LIGA_IDX_MASK);
+	pio_get_interrupt_status(BUT_PIO_LIGA);
+	NVIC_EnableIRQ(BUT_PIO_LIGA_ID);
+	NVIC_SetPriority(BUT_PIO_LIGA_ID, 4);
+}
 /************************************************************************/
 /* port lvgl                                                            */
 /************************************************************************/
@@ -586,17 +608,13 @@ int main(void) {
 	configure_lcd();
 	configure_touch();
 	configure_lvgl();
-
-
 	
+	io_init();
+
 	  // cria semáforo binário
 	 xSemaphoreClock = xSemaphoreCreateBinary();
 	 if (xSemaphoreClock == NULL)
 	 printf("falha em criar o semaforo \n");
-	 
-	  xSemaphoreDesliga = xSemaphoreCreateBinary();
-	  if (xSemaphoreDesliga == NULL)
-	  printf("falha em criar o semaforo \n");
 	 
 	/* Create task to control oled */
 	if (xTaskCreate(task_lcd, "LCD", TASK_LCD_STACK_SIZE, NULL, TASK_LCD_STACK_PRIORITY, NULL) != pdPASS) {
